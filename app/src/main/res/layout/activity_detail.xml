@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#210340"
+        android:paddingTop="35dp"
+        android:paddingHorizontal="10dp"
+        android:autoLink="web"
+        android:paddingBottom="15dp">
+
+        <!-- Картинка -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="220dp">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/galleryViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_gravity="bottom"
+                android:background="@android:color/transparent"
+                app:tabBackground="@drawable/tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabRippleColor="@null" />
+
+        </FrameLayout>
+
+
+        <!-- Название -->
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/textName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:text="Название"/>
+
+        <!-- Жанр + год -->
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/textGenreDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Жанр • Год"
+            android:layout_marginTop="8dp"
+            android:textSize="16sp"/>
+        <!-- Издатель -->
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/textPublisher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:text="Издатель"/>
+        <!-- Разрабы -->
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/textDeveloper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:text="Разработчики"/>
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/textUrlGame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:autoLink="web"
+            android:text="Сайт игры"/>
+        <!-- Описание -->
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/textDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:text="Описание..."/>
+        <!-- Cистемные требования -->
+        <TextView
+            android:textColor="@color/white"
+            android:id="@+id/textRequirements"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:text="Минимальные Cистемные требования"/>
+
+        <!-- Рейтинг -->
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:layout_marginTop="16dp"
+            android:progressTint="@color/chip_background_color"
+            android:progressBackgroundTint="@color/chip_background_checked_color"
+            android:secondaryProgressTint="#E0E0E0"/>
+
+        <!-- Комментарий -->
+        <EditText
+            android:textColor="@color/white"
+            android:id="@+id/editComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ваш комментарий..."
+            android:minHeight="120dp"
+            android:gravity="top"
+            android:textColorHint="#A0A0A0"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Блок с кнопками "Избранное" и "Сохранить" -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical">
+
+            <!-- Избранное -->
+            <ImageButton
+                android:id="@+id/buttonFavorite"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/btn_star_big_off"/>
+
+            <!-- Сохранить -->
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="Сохранить"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</ScrollView>

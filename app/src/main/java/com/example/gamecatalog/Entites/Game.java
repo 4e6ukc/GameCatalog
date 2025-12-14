@@ -1,16 +1,33 @@
 package com.example.gamecatalog.Entites;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+import com.google.gson.annotations.SerializedName;
+
+@Entity(tableName = "games")
 public class Game {
-    int id;
-    String title;
-    String thumbnail;
-    String short_description;
-    String game_url;
-    String genre;
-    String platform;
-    String publisher;
-    String developer;
-    String release_date;
+    @PrimaryKey
+   public int id;
+    public  String title;
+    public String thumbnail;
+    public String short_description;
+    @SerializedName("genre")
+    public String genre;
+    public String publisher;
+
+    public String release_date;
+    // Локальные данные пользователя
+    @ColumnInfo(defaultValue = "0")
+    public boolean isFavorite = false;
+
+    @ColumnInfo(defaultValue = "")
+    public String comment = "";
+
+    @ColumnInfo(defaultValue = "0")
+    public float rating = 0;
 
     public int getId() {
         return id;
@@ -28,25 +45,22 @@ public class Game {
         return short_description;
     }
 
-    public String getGame_url() {
-        return game_url;
+    public float getRating() {
+        return rating;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public String getGenre() {
         return genre;
     }
 
-    public String getPlatform() {
-        return platform;
-    }
-
     public String getPublisher() {
         return publisher;
     }
 
-    public String getDeveloper() {
-        return developer;
-    }
 
     public String getRelease_date() {
         return release_date;

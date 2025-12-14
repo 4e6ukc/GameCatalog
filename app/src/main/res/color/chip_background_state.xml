@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Цвет, когда чип выбран (android:state_checked="true") -->
+    <item android:color="@color/chip_background_checked_color" android:state_checked="true" />
+    <!-- Цвет по умолчанию (для всех остальных состояний) -->
+    <item android:color="@color/chip_background_color" />
+</selector>

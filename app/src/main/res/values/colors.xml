@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="chip_background_color">#ff6501</color> <!-- Например, темно-фиолетовый -->
+    <color name="chip_background_checked_color">#d81f60</color> <!-- Яркий фиолетовый для выделения -->
+    <color name="chip_text_color">#FFFFFF</color> <!-- Белый цвет для текста -->
 </resources>

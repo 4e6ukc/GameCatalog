@@ -1,9 +1,23 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.GameCatalog" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:navigationBarColor">#210340</item>
+        <item name="searchViewStyle">@style/App.SearchViewStyle</item>
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
     <style name="Theme.GameCatalog" parent="Base.Theme.GameCatalog" />
+    <style name="App.SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Цвет текста, который вы вводите -->
+        <item name="android:textColor">@color/white</item>
+
+        <!-- Цвет текста-подсказки ("Поиск по названию") -->
+        <item name="android:textColorHint">#A0FFFFFF</item> <!-- Полупрозрачный белый -->
+
+        <!-- Цвет иконки лупы, кнопки "очистить" (X) и кнопки "назад" -->
+        <item name="android:tint">@color/white</item>
+    </style>
+
 </resources>

@@ -1,19 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="#210340"
+    tools:context=".UI.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- Верхняя панель (Toolbar) -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"
+        android:background="@drawable/gradient_menu"
+        app:titleTextColor="@color/white"
+        android:paddingTop="15dp"
+        android:title="Каталог бесплатных игр"
+        android:titleTextColor="@android:color/white"
+        app:layout_scrollFlags="scroll|enterAlways" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize">
+        <!-- Блок с фильтрами (стили) -->
+        <HorizontalScrollView
+            android:id="@+id/scrollFilters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupStyles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isScrollContainer="false"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="8dp"/>
+
+        </HorizontalScrollView>
+
+
+        <!-- Индикатор загрузки -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp" />
+
+        <!-- Текст 'пусто' -->
+        <TextView
+            android:id="@+id/textEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Нет данных"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Список зданий -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerGames"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="12dp"/>
+
+    </LinearLayout>
+
+    <!-- Плавающая кнопка 'Избранное' -->
+    <ImageButton
+        android:id="@+id/GameBtNFavorites"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom|end"
+
+        android:background="@drawable/gradient_click_fav"
+        android:layout_margin="24dp"
+        android:contentDescription="Избранное"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
