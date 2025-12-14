@@ -16,7 +16,6 @@ public class GameListViewModel extends AndroidViewModel {
     private final GameRepository repository;
     private final MutableLiveData<Boolean> isDataReady = new MutableLiveData<>(false);
 
-    // КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: MediatorLiveData будет переключаться между разными источниками LiveData
     private final MediatorLiveData<List<Game>> displayedGames = new MediatorLiveData<>();
     private LiveData<List<Game>> currentSource = null;
 

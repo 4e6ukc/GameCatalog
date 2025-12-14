@@ -29,7 +29,7 @@ public class DetailActivity extends AppCompatActivity {
     private Game localGameData;
     private GameListViewModel viewModel;
 
-
+    private int gameId;
     private ViewPager2 galleryViewPager;
     private TabLayout tabIndicator;
     private GalleryAdapter galleryAdapter;
@@ -46,22 +46,29 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        // Получаем ID игры
-        int gameId = getIntent().getIntExtra("Game", -1); // Используем ключ "Game", как в MainActivity
+        gameId = getIntent().getIntExtra("Game", -1);
         if (gameId == -1) {
             Toast.makeText(this, "Ошибка: ID игры не найден", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
+        // Инициализируем ViewModel
         viewModel = new ViewModelProvider(this).get(GameListViewModel.class);
+
+        // Инициализируем все View-элементы
         initViews();
+
+        // Настраиваем галерею
         setupGallery();
 
+        // Устанавливаем слушатели на кнопки
         setupClickListeners();
 
-        // Запускаем параллельную загрузку данных
+        // Загружаем данные из сети
         fetchGameDetails(gameId);
+
+        // Параллельно загружаем локальные данные (рейтинг, избранное)
         loadLocalGameData(gameId);
     }
 

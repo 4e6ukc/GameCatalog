@@ -4,7 +4,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import com.example.gamecatalog.Entites.Game;
 import com.example.gamecatalog.Retrofit.RetrofiClient;
-import androidx.lifecycle.MediatorLiveData;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;

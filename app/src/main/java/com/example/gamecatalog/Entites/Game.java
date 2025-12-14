@@ -41,9 +41,7 @@ public class Game {
         return thumbnail;
     }
 
-    public String getShort_description() {
-        return short_description;
-    }
+
 
     public float getRating() {
         return rating;
@@ -64,6 +62,10 @@ public class Game {
 
     public String getRelease_date() {
         return release_date;
+    }
+
+    public String getShortDescription() {
+        return short_description;
     }
 }
 
