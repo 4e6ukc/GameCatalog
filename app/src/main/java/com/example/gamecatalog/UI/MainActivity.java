@@ -34,12 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private GameListViewModel viewModel;
 
     private List<Game> fullListFromVm = new ArrayList<>();
-    private SortMode sortMode = SortMode.NONE;
+
     private String currentQuery = "";
     private String currentGenreFilter = null;
-
-    private enum SortMode { NONE, NAME_ASC, NAME_DESC, RELEASE_DATE_NEWEST, RELEASE_DATE_OLDEST, PUBLISHER }
-
+    enum SortMode {NONE, NAME_ASC, NAME_DESC, RELEASE_DATE_NEWEST, RELEASE_DATE_OLDEST, PUBLISHER }
+    private SortMode sortMode = SortMode.NONE;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,28 +133,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void applyAllLocalFilters() {
+        // fullListFromVm уже приходит отсортированным из LiveData
         List<Game> filteredList = new ArrayList<>(fullListFromVm);
 
+        // 1. Применяем фильтр по жанру (если он выбран)
         if (currentGenreFilter != null) {
             filteredList.removeIf(game -> !currentGenreFilter.equals(game.getGenre()));
         }
 
+        // 2. Применяем фильтр по поисковому запросу (если он есть)
         if (!TextUtils.isEmpty(currentQuery)) {
             String lowerCaseQuery = currentQuery.toLowerCase().trim();
             filteredList.removeIf(game -> game.getTitle() == null || !game.getTitle().toLowerCase().contains(lowerCaseQuery));
         }
 
-        switch (sortMode) {
-            case NAME_ASC: filteredList.sort(Comparator.comparing(Game::getTitle, String.CASE_INSENSITIVE_ORDER)); break;
-            case NAME_DESC: filteredList.sort(Comparator.comparing(Game::getTitle, String.CASE_INSENSITIVE_ORDER).reversed()); break;
-            case RELEASE_DATE_NEWEST: filteredList.sort(Comparator.comparing(Game::getRelease_date, Comparator.nullsLast(Comparator.reverseOrder()))); break;
-            case RELEASE_DATE_OLDEST: filteredList.sort(Comparator.comparing(Game::getRelease_date, Comparator.nullsLast(Comparator.naturalOrder()))); break;
-            case PUBLISHER: filteredList.sort(Comparator.comparing(Game::getPublisher, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER))); break;
-            default: break;
-        }
+        // БЛОК switch (sortMode) { ... } БОЛЬШЕ НЕ НУЖЕН И ПОЛНОСТЬЮ УДАЛЕН
 
+        // 3. Отдаем в адаптер отфильтрованный (но уже ранее отсортированный) список
         adapter.setItems(filteredList);
 
+        // 4. Проверяем, не пуст ли итоговый список, и показываем/скрываем заглушку
         if (filteredList.isEmpty()) {
             recycler.setVisibility(View.GONE);
             textEmpty.setVisibility(View.VISIBLE);
@@ -164,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
             textEmpty.setVisibility(View.GONE);
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -193,11 +191,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSortDialog() {
-        final String[] options = new String[]{"Без сортировки", "По названию (А-Я)", "По названию (Я-А)", "Сначала новые", "Сначала старые", "По издателю"};
+        // Возвращаем опцию "Без сортировки"
+        final String[] options = new String[]{
+                "Без сортировки",
+                "По названию (А-Я)",
+                "По названию (Я-А)",
+                "Сначала новые",
+                "Сначала старые",
+                "По издателю"
+        };
+
         new AlertDialog.Builder(this)
                 .setTitle("Сортировка")
                 .setSingleChoiceItems(options, sortMode.ordinal(), (dialog, which) -> sortMode = SortMode.values()[which])
-                .setPositiveButton("Применить", (dialog, which) -> applyAllLocalFilters())
+                .setPositiveButton("Применить", (dialog, which) -> {
+                    viewModel.setSortMode(sortMode); // Сообщаем ViewModel о новом режиме
+                })
                 .setNegativeButton("Отмена", null)
                 .show();
     }

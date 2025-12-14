@@ -4,6 +4,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import com.example.gamecatalog.Entites.Game;
 import com.example.gamecatalog.Retrofit.RetrofiClient;
+import androidx.lifecycle.MediatorLiveData;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +40,10 @@ public class GameRepository {
         new Thread(() -> gameDao.setFavorite(gameId, isFavorite)).start();
     }
     public void updateGame(Game game) {
-        new Thread(() -> gameDao.update(game)).start();
+        // Запускаем обновление в фоновом потоке
+        new Thread(() -> {
+            gameDao.update(game);
+        }).start();
     }
 
     public void refreshData(Runnable onDataReady) {
@@ -94,4 +98,10 @@ public class GameRepository {
             }
         });
     }
+    public LiveData<List<Game>> getAllSortedByDateDesc() { return gameDao.getAllSortedByDateDesc(); }
+    public LiveData<List<Game>> getAllSortedByNameAsc() { return gameDao.getAllSortedByNameAsc(); }
+    public LiveData<List<Game>> getAllSortedByNameDesc() { return gameDao.getAllSortedByNameDesc(); }
+    public LiveData<List<Game>> getAllSortedByDateAsc() { return gameDao.getAllSortedByDateAsc(); }
+    public LiveData<List<Game>> getAllSortedByPublisher() { return gameDao.getAllSortedByPublisher(); }
+
 }

@@ -32,6 +32,26 @@ public interface GameDao {
     @Query("SELECT * FROM games WHERE title LIKE '%' || :query || '%'")
     LiveData<List<Game>> searchByTitle(String query);
 
+    // Новый метод по умолчанию (сортировка по дате релиза)
+    @Query("SELECT * FROM games ORDER BY release_date DESC")
+    LiveData<List<Game>> getAllSortedByDateDesc();
+
+    // Сортировка по названию (А-Я)
+    @Query("SELECT * FROM games ORDER BY title ASC")
+    LiveData<List<Game>> getAllSortedByNameAsc();
+
+    // Сортировка по названию (Я-А)
+    @Query("SELECT * FROM games ORDER BY title DESC")
+    LiveData<List<Game>> getAllSortedByNameDesc();
+
+    // Сортировка по дате релиза (старые)
+    @Query("SELECT * FROM games ORDER BY release_date ASC")
+    LiveData<List<Game>> getAllSortedByDateAsc();
+
+    // Сортировка по издателю
+    @Query("SELECT * FROM games ORDER BY publisher ASC")
+    LiveData<List<Game>> getAllSortedByPublisher();
+
     // Получить список уникальных жанров для фильтров
     @Query("SELECT DISTINCT TRIM(genre) FROM games WHERE genre IS NOT NULL AND genre != '' ORDER BY TRIM(genre) ASC")
     LiveData<List<String>> getUniqueGenres();
