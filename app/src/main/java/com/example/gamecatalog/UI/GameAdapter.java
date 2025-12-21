@@ -63,6 +63,8 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.Holder> {
         // Загрузка изображения
         Glide.with(h.itemView.getContext())
                 .load(game.thumbnail)
+                .placeholder(R.drawable.icon_add_image) // Твоя заглушка
+                .error(R.drawable.icon_add_image)       // Покажет это же, если по ссылке ничего нет
                 .into(h.image);
 
         // Установка иконки избранного

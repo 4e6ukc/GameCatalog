@@ -22,7 +22,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Comparator;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String currentQuery = "";
     private String currentGenreFilter = null;
-    enum SortMode {NONE, NAME_ASC, NAME_DESC, RELEASE_DATE_NEWEST, RELEASE_DATE_OLDEST, PUBLISHER }
+    enum SortMode {NONE, NAME_ASC, NAME_DESC, RELEASE_DATE_NEWEST, RELEASE_DATE_OLDEST, PUBLISHER, USER_CREATED}
     private SortMode sortMode = SortMode.NONE;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +57,35 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         findViewById(R.id.GameBtNFavorites).setOnClickListener(v ->
                 startActivity(new Intent(this, FavoritesActivity.class)));
+        findViewById(R.id.GameBtNUsers).setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserItemActivity.class);
+            // Мы НЕ передаем сюда GAME_ID, поэтому UserItemActivity поймет,
+            // что нужно работать в режиме создания новой записи.
+            startActivity(intent);
+        });
     }
 
     private void setupRecyclerView() {
         recycler.setLayoutManager(new LinearLayoutManager(this));
         adapter = new GameAdapter();
         recycler.setAdapter(adapter);
+
         adapter.setOnItemClickListener((game, imageView) -> {
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("Game", game.getId());
+            Intent intent;
+            if (game.isUserCreated) {
+                // Если игра создана пользователем — открываем экран редактирования
+                intent = new Intent(this, UserItemActivity.class);
+                intent.putExtra("GAME_ID", game.getId()); // Передаем ID для загрузки данных
+            } else {
+                // Если игра из API — открываем стандартное детальное окно
+                intent = new Intent(this, DetailActivity.class);
+                intent.putExtra("Game", game.getId());
+            }
             startActivity(intent);
         });
-        adapter.setOnFavoriteClickListener(game -> viewModel.setFavorite(game.getId(), !game.isFavorite));
+
+        adapter.setOnFavoriteClickListener(game ->
+                viewModel.setFavorite(game.getId(), !game.isFavorite));
     }
 
     private void setupViewModel() {
@@ -136,23 +153,21 @@ public class MainActivity extends AppCompatActivity {
         // fullListFromVm уже приходит отсортированным из LiveData
         List<Game> filteredList = new ArrayList<>(fullListFromVm);
 
-        // 1. Применяем фильтр по жанру (если он выбран)
+        //  Применяем фильтр по жанру (если он выбран)
         if (currentGenreFilter != null) {
             filteredList.removeIf(game -> !currentGenreFilter.equals(game.getGenre()));
         }
 
-        // 2. Применяем фильтр по поисковому запросу (если он есть)
+        //  Применяем фильтр по поисковому запросу (если он есть)
         if (!TextUtils.isEmpty(currentQuery)) {
             String lowerCaseQuery = currentQuery.toLowerCase().trim();
             filteredList.removeIf(game -> game.getTitle() == null || !game.getTitle().toLowerCase().contains(lowerCaseQuery));
         }
 
-        // БЛОК switch (sortMode) { ... } БОЛЬШЕ НЕ НУЖЕН И ПОЛНОСТЬЮ УДАЛЕН
-
-        // 3. Отдаем в адаптер отфильтрованный (но уже ранее отсортированный) список
+        // Отдаем в адаптер отфильтрованный (но уже ранее отсортированный) список
         adapter.setItems(filteredList);
 
-        // 4. Проверяем, не пуст ли итоговый список, и показываем/скрываем заглушку
+        //  Проверяем, не пуст ли итоговый список, и показываем/скрываем заглушку
         if (filteredList.isEmpty()) {
             recycler.setVisibility(View.GONE);
             textEmpty.setVisibility(View.VISIBLE);
@@ -198,7 +213,8 @@ public class MainActivity extends AppCompatActivity {
                 "По названию (Я-А)",
                 "Сначала новые",
                 "Сначала старые",
-                "По издателю"
+                "По издателю",
+                "Мои игры (Пользовательские)"
         };
 
         new AlertDialog.Builder(this)

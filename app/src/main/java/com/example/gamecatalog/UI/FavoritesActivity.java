@@ -57,9 +57,19 @@ public class FavoritesActivity extends AppCompatActivity {
 
         // Обработчик клика для перехода на детальный экран
         adapter.setOnItemClickListener((game, imageView) -> {
-            Intent intent = new Intent(FavoritesActivity.this, DetailActivity.class);
-            // Передаем ID игры с правильным ключом "Game"
-            intent.putExtra("Game", game.getId());
+            Intent intent;
+
+            // Проверяем: если игра создана пользователем
+            if (game.isUserCreated) {
+                // Открываем экран редактирования пользователя
+                intent = new Intent(FavoritesActivity.this, UserItemActivity.class);
+                intent.putExtra("GAME_ID", game.getId());
+            } else {
+                // Если игра из API — открываем стандартный детальный экран
+                intent = new Intent(FavoritesActivity.this, DetailActivity.class);
+                intent.putExtra("Game", game.getId());
+            }
+
             startActivity(intent);
         });
 

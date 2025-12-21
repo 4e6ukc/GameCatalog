@@ -26,6 +26,10 @@
         <activity
             android:name=".UI.FavoritesActivity"
             android:exported="false" />
+        <activity
+            android:name=".UI.UserItemActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

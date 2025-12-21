@@ -81,7 +81,18 @@
             android:paddingTop="12dp"/>
 
     </LinearLayout>
-
+    <ImageButton
+        android:id="@+id/GameBtNUsers"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="100dp"
+        android:background="@drawable/gradient_click_fav"
+        android:contentDescription="Избранное"
+        app:srcCompat="@drawable/icon_plus"
+        android:scaleType="fitCenter"
+        />
     <!-- Плавающая кнопка 'Избранное' -->
     <ImageButton
         android:id="@+id/GameBtNFavorites"

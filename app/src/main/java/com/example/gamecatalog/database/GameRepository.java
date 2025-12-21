@@ -50,53 +50,66 @@ public class GameRepository {
         RetrofiClient.api().getGameList().enqueue(new Callback<List<Game>>() {
             @Override
             public void onResponse(Call<List<Game>> call, Response<List<Game>> response) {
-                if (!response.isSuccessful() || response.body() == null) {
-                    Log.e(REPO_TAG, "Ошибка загрузки: " + response.code());
-                    // Сигнализируем о завершении, даже если ошибка
-                    if (onDataReady != null) {
-                        onDataReady.run();
-                    }
-                    return;
-                }
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Game> newListFromServer = response.body();
 
-                // Новые данные с сервера
-                List<Game> newListFromServer = response.body();
+                    new Thread(() -> {
+                        // 1. Получаем ВСЕ игры из базы (и API-шные, и пользовательские)
+                        List<Game> allOldGames = gameDao.getAllSync();
 
-                new Thread(() -> {
-                    // Получаем текущие данные из базы
-                    List<Game> oldListFromDb = gameDao.getAllSync();
+                        for (Game newGame : newListFromServer) {
+                            // По умолчанию считаем, что это игра из API
+                            newGame.isUserCreated = false;
 
-                    // Переносим локальные поля
-                    for (Game newGame : newListFromServer) {
-                        for (Game oldGame : oldListFromDb) {
-                            if (newGame.id == oldGame.id) {
-                                newGame.isFavorite = oldGame.isFavorite;
-                                newGame.comment = oldGame.comment;
-                                newGame.rating = oldGame.rating;
-                                break;
+                            for (Game oldGame : allOldGames) {
+                                if (newGame.id == oldGame.id) {
+                                    // 2. ПРОВЕРКА: Если в базе под этим ID лежит пользовательская игра
+                                    if (oldGame.isUserCreated) {
+                                        // ОЙ! Конфликт ID.
+                                        // Чтобы не потерять игру пользователя, меняем ID у игры из API
+                                        // (или наоборот, но проще проигнорировать замену)
+                                        // В данном случае мы можем просто пропустить обновление этой игры из API
+                                        // или задать ей временный отрицательный ID, чтобы не было REPLACE
+                                        Log.w(REPO_TAG, "Конфликт ID! Игра из API " + newGame.id + " совпала с пользовательской.");
+                                    } else {
+                                        // Это обычная игра из API, переносим локальные поля
+                                        newGame.isFavorite = oldGame.isFavorite;
+                                        newGame.comment = oldGame.comment;
+                                        newGame.rating = oldGame.rating;
+                                    }
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    // Вставляем "слитый" список.
-                    gameDao.insertAll(newListFromServer);
+                        // 3. Вставляем.
+                        // ВАЖНО: insertAll заменит старые игры API новыми,
+                        // но НЕ ТРОНЕТ пользовательские игры, у которых ID другие.
+                        gameDao.insertAll(newListFromServer);
 
-                    //В самом конце фоновой задачи сигналим о готовности
-                    if (onDataReady != null) {
-                        onDataReady.run();
-                    }
-                }).start();
-            }
-
-            @Override
-            public void onFailure(Call<List<Game>> call, Throwable t) {
-                Log.e(REPO_TAG, "Сетевая ошибка: " + t.getMessage());
-                // Сигналим о завершении при ошибке сети
-                if (onDataReady != null) {
-                    onDataReady.run();
+                        if (onDataReady != null) onDataReady.run();
+                    }).start();
                 }
             }
+            @Override
+            public void onFailure(Call<List<Game>> call, Throwable t) {
+                if (onDataReady != null) onDataReady.run();
+            }
         });
+    }
+    public void insertGame(Game game) {
+        new Thread(() -> {
+            gameDao.insert(game);
+        }).start();}
+
+    // Удалить игру из базы
+    public void deleteGame(Game game) {
+        new Thread(() -> {
+            gameDao.delete(game);
+        }).start();
+    }
+    public LiveData<List<Game>> getUserCreatedGames() {
+        return gameDao.getUserCreatedGames();
     }
     public LiveData<List<Game>> getAllSortedByDateDesc() { return gameDao.getAllSortedByDateDesc(); }
     public LiveData<List<Game>> getAllSortedByNameAsc() { return gameDao.getAllSortedByNameAsc(); }

@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData; // Важный импорт
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.gamecatalog.Entites.Game;
 import com.example.gamecatalog.database.AppDatabase;
@@ -33,7 +33,7 @@ public class GameListViewModel extends AndroidViewModel {
     // Метод для смены сортировки
     public void setSortMode(MainActivity.SortMode sortMode) {
         if (currentSource != null) {
-            displayedGames.removeSource(currentSource); // Отписываемся от старого
+            displayedGames.removeSource(currentSource);
         }
 
         switch (sortMode) {
@@ -42,9 +42,10 @@ public class GameListViewModel extends AndroidViewModel {
             case NAME_DESC: currentSource = repository.getAllSortedByNameDesc(); break;
             case RELEASE_DATE_OLDEST: currentSource = repository.getAllSortedByDateAsc(); break;
             case PUBLISHER: currentSource = repository.getAllSortedByPublisher(); break;
+            case USER_CREATED: currentSource = repository.getUserCreatedGames(); break;
             case NONE: // <-- Добавляем обработку
             default:   // <-- И делаем ее поведением по умолчанию
-                currentSource = repository.getAll(); // Используем оригинальный метод
+                currentSource = repository.getAll();
                 break;
         }
 
@@ -60,7 +61,13 @@ public class GameListViewModel extends AndroidViewModel {
     public LiveData<Game> getGameById(int id) { return repository.getGameById(id); }
     public LiveData<List<Game>> getFavorites() { return repository.getFavorites(); }
     public LiveData<List<String>> getUniqueGenres() { return repository.getUniqueGenres(); }
+    public void insertGame(Game game) {
+        repository.insertGame(game);
+    }
 
+    public void deleteGame(Game game) {
+        repository.deleteGame(game);
+    }
 
     public void updateGame(Game game) {
         repository.updateGame(game);

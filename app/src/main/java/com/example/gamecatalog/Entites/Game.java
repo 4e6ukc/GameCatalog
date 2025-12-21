@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "games")
 public class Game {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
    public int id;
     public  String title;
     public String thumbnail;
@@ -17,7 +17,7 @@ public class Game {
     @SerializedName("genre")
     public String genre;
     public String publisher;
-
+    public boolean isUserCreated = false;
     public String release_date;
     // Локальные данные пользователя
     @ColumnInfo(defaultValue = "0")

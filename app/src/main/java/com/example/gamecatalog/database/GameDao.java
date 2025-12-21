@@ -2,6 +2,7 @@ package com.example.gamecatalog.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -60,9 +61,15 @@ public interface GameDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Game> games);
 
+    @Query("SELECT * FROM games WHERE isUserCreated = 1 ORDER BY id DESC")
+    LiveData<List<Game>> getUserCreatedGames();
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long insert(Game game);
     // Обновить одну запись (когда пользователь сохраняет рейтинг/комментарий)
     @Update
     void update(Game game);
+    @Delete
+    void delete(Game game);
 
     // Просто и быстро изменить статус "избранное" по ID
     @Query("UPDATE games SET isFavorite = :isFav WHERE id = :gameId")

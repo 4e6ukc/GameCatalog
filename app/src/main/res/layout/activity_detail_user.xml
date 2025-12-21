@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#210340"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#210340"
+        android:paddingTop="35dp"
+        android:paddingHorizontal="10dp"
+        android:autoLink="web"
+        android:paddingBottom="15dp">
+
+        <!-- Картинка -->
+        <ImageButton
+            android:id="@+id/imageGameUsers"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+           android:src="@drawable/icon_add_image"
+            android:scaleType="fitCenter"
+            android:background="@drawable/gradient"
+            />
+        <!-- Название -->
+        <EditText
+            android:textColor="@color/white"
+            android:textColorHint="#A0A0A0"
+            android:id="@+id/textNameUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/transparent"
+            android:hint="Название..."/>
+
+        <!-- Жанр -->
+        <EditText
+            android:textColor="@color/white"
+            android:textColorHint="#A0A0A0"
+            android:id="@+id/textGenreUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Жанр..."
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:textSize="16sp"/>
+        <!-- Date -->
+        <EditText
+            android:textColor="@color/white"
+            android:textColorHint="#A0A0A0"
+            android:id="@+id/textDateUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:background="@android:color/transparent"
+            android:hint="Год..."/>
+        <!-- издатель -->
+        <EditText
+            android:textColor="@color/white"
+            android:textColorHint="#A0A0A0"
+            android:id="@+id/textPublisherUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:background="@android:color/transparent"
+            android:hint="Издатель..."/>
+
+        <EditText
+            android:textColor="@color/white"
+            android:textColorHint="#A0A0A0"
+            android:id="@+id/textDescriptionUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="16sp"
+            android:hint="Описание..."
+            android:background="@android:color/transparent"/>
+        <!-- Cистемные требования -->
+        <RatingBar
+            android:id="@+id/ratingBarUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:layout_marginTop="16dp"
+            android:progressTint="@color/chip_background_color"
+            android:progressBackgroundTint="@color/chip_background_checked_color"
+            android:secondaryProgressTint="#E0E0E0"/>
+
+        <!-- Комментарий -->
+        <EditText
+            android:textColor="@color/white"
+            android:id="@+id/editCommentUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ваш комментарий..."
+            android:minHeight="120dp"
+            android:gravity="top"
+            android:textColorHint="#A0A0A0"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+    </ScrollView>
+    <!-- Блок с кнопками "Избранное" и "Сохранить" -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_vertical"
+        >
+
+        <!-- Избранное -->
+        <ImageButton
+            android:id="@+id/buttonFavoriteUsers"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/btn_star_big_off"/>
+
+        <!-- Сохранить -->
+        <Button
+            android:id="@+id/buttonSaveUsers"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Сохранить"/>
+        <ImageButton
+            android:id="@+id/buttonDeleteUsers"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_delete"/>
+
+    </LinearLayout>
+</LinearLayout>

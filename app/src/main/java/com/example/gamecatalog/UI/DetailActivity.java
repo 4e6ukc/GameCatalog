@@ -28,7 +28,8 @@ public class DetailActivity extends AppCompatActivity {
     // Локальная сущность для сохранения рейтинга, комментов и избранного
     private Game localGameData;
     private GameListViewModel viewModel;
-
+    private ProgressBar progressBar;
+    private View mainContent;
     private int gameId;
     private ViewPager2 galleryViewPager;
     private TabLayout tabIndicator;
@@ -73,7 +74,10 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        progressBar = findViewById(R.id.progressBarDetail);
+        mainContent = findViewById(R.id.mainContent);
         galleryViewPager = findViewById(R.id.galleryViewPager);
+
         tabIndicator = findViewById(R.id.tabIndicator);
         textName = findViewById(R.id.textName);
         textGenreDate = findViewById(R.id.textGenreDate);
@@ -91,19 +95,32 @@ public class DetailActivity extends AppCompatActivity {
 
     // Загрузка данных с сервера
     private void fetchGameDetails(int gameId) {
+        // Перед запросом: показываем прогресс, скрываем контент
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+        if (mainContent != null) mainContent.setVisibility(View.GONE);
+
         RetrofiClient.api().getGame(gameId).enqueue(new Callback<GameDetails>() {
             @Override
             public void onResponse(Call<GameDetails> call, Response<GameDetails> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     populateUiWithDetails(response.body());
+
+                    // ДАННЫЕ ПРИШЛИ: Прячем прогресс, показываем контент
+                    if (progressBar != null) progressBar.setVisibility(View.GONE);
+                    if (mainContent != null) mainContent.setVisibility(View.VISIBLE);
+
                 } else {
-                    Toast.makeText(DetailActivity.this, "Не удалось загрузить детали игры", Toast.LENGTH_SHORT).show();
+                    // Если 404 или ошибка сервера
+                    Toast.makeText(DetailActivity.this, "Ошибка сервера: " + response.code(), Toast.LENGTH_LONG).show();
+                    // progressBar остается VISIBLE, mainContent остается GONE
                 }
             }
+
             @Override
             public void onFailure(Call<GameDetails> call, Throwable t) {
                 Log.e("DetailActivity", "Ошибка сети", t);
-                Toast.makeText(DetailActivity.this, "Ошибка сети: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailActivity.this, "Проверьте подключение к сети", Toast.LENGTH_LONG).show();
+                // progressBar остается VISIBLE
             }
         });
     }
